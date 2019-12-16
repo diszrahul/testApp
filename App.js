@@ -7,7 +7,7 @@
  * @flow
  */
 
-import React from 'react';
+import React, { Component } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,6 +17,7 @@ import {
   StatusBar,
   FlatList,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 
 import {
@@ -27,44 +28,77 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const companies = [
-  {id: 1, name: 'Amazon', location: 'Seattle'},
-  {id: 2, name: 'Apple', location: 'Cupertino'},
-  {id: 3, name: 'Facebook', location: 'Menlo Park'},
-  {id: 4, name: 'Google', location: 'Mountain View'},
-  {id: 5, name: 'Leeroy', location: 'Sundsvall'},
-  {id: 6, name: 'Tesla', location: 'Palo Alto'},
-  {id: 7, name: 'Revolut', location: 'London'},
-  {id: 8, name: 'Microsoft', location: 'Redmond'}
-];
-
 function showSomething(){
   alert('hi');
 }
 
-const App: () => React$Node = () => {
+// onChangeText=(text)=>{
+//    debugger
+  
+// }
+
+// function filter(){
+//   let newData = Object.assign([], companies);
+//     newData = newData.filter((item) => {
+//       console.log(item);
+//       // return item.name.indexOf(text.toLowerCase()) > -1;
+//     });
+//     companies=Object.assign([], newData);
+// }
+
+export default class App extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      searchString:'',
+      companies : [
+        {id: 1, name: 'Amazon', location: 'Seattle'},
+        {id: 2, name: 'Apple', location: 'Cupertino'},
+        {id: 3, name: 'Facebook', location: 'Menlo Park'},
+        {id: 4, name: 'Google', location: 'Mountain View'},
+        {id: 5, name: 'Leeroy', location: 'Sundsvall'},
+        {id: 6, name: 'Tesla', location: 'Palo Alto'},
+        {id: 7, name: 'Revolut', location: 'London'},
+        {id: 8, name: 'Microsoft', location: 'Redmond'}
+      ],
+    }
+  }
+
+  render(){
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView>
+        <TextInput style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+      onChangeText={(text)=>{
+        this.setState({
+          searchString:text,
+        },function(){
+          let newData = Object.assign([], this.state.companies);
+          newData = newData.filter((item) => {
+            return item.name.indexOf(text) > -1;
+          });
+          this.setState({
+            companies:newData,
+          });
+        });
+      }}
+      value={this.state.searchString}/>
       <FlatList
-                data={companies}
+                data={this.state.companies}
                 showsVerticalScrollIndicator={false}
                 initialNumToRender={1000}
                 // getItemLayout
                 keyExtractor={(item,index) => item.id.toString()}
                 renderItem={({ item }) => (
-                <View><TouchableOpacity onPress={this.showSomething.bind(this)}>
+                <View><TouchableOpacity onPress={()=>{this.showSomething()}}>
                   <Text>{item.name} Location {item.location} </Text>
                   </TouchableOpacity>
                   </View>
                 )} 
         />
       </SafeAreaView>
-    </>
   );
-};
-
+                }
+}
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: Colors.lighter,
@@ -103,5 +137,3 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
-export default App;
