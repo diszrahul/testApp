@@ -38,7 +38,7 @@ const companies = [
   {id: 8, name: 'Microsoft', location: 'Redmond'}
 ];
 
-showSomething=()=>{
+function showSomething(){
   alert('hi');
 }
 
@@ -50,8 +50,11 @@ const App: () => React$Node = () => {
       <FlatList
                 data={companies}
                 showsVerticalScrollIndicator={false}
+                initialNumToRender={1000}
+                // getItemLayout
+                keyExtractor={(item,index) => item.id.toString()}
                 renderItem={({ item }) => (
-                <View><TouchableOpacity onPress={()=>{this.showSomething()}}>
+                <View><TouchableOpacity onPress={this.showSomething.bind(this)}>
                   <Text>{item.name} Location {item.location} </Text>
                   </TouchableOpacity>
                   </View>
