@@ -27,6 +27,8 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { Provider } from 'react-redux';
+import store from './store';
 
 function showSomething(){
   alert('hi');
@@ -66,6 +68,7 @@ export default class App extends Component {
 
   render(){
   return (
+    <Provider store={store}>
       <SafeAreaView>
         <TextInput style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
       onChangeText={(text)=>{
@@ -96,6 +99,7 @@ export default class App extends Component {
                 )} 
         />
       </SafeAreaView>
+      </Provider>
   );
                 }
 }
